@@ -14,6 +14,8 @@ apt-get install -y llvm-3.5 llvm-3.5-dev llvm-3.5-runtime llvm-3.5-doc llvm-3.5-
 
 opam init --no-setup
 
+eval `opam config env`
+
 opam update
 
 opam install -y core core_extended utop llvm
