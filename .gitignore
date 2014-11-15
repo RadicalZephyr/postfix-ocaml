@@ -1,1 +1,6 @@
 /.vagrant/
+/llvmutop
+/myutop_main.cmi
+/myutop_main.cmo
+/_build/
+/postfix.byte
