@@ -75,7 +75,7 @@ let nget stack =
 
   | Some (IntVal vi) ->
      let slist = Stack.to_list stack in
-     match List.nth slist vi with
+     match List.nth slist (vi - 1) with
      | None ->
         eprintf "Not enough values on the stack\n%!";
         exit 1
