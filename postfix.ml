@@ -36,11 +36,12 @@ let validate program =
    print_usage Sys.argv.(0);
    None
 
-let compile program arglist =
+let compile program args =
   let (numargs, ast) = program in
   printf "Valid postfix program of %d args:\n" numargs;
   Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
-  print_newline ()
+  print_newline ();
+  Interpreter.run numargs args ast
 
 let postfix_program =
   Command.Spec.Arg_type.create
