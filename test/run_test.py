@@ -29,7 +29,7 @@ def run_test(program, args, result):
 
     except CalledProcessError as e:
         print (u"  {t.red}\u2718{t.normal}: Running: {} " + \
-               "Expected '{}', Got '{}'\n").format(to_run,
+               "Expected '{}', Got '{}'").format(to_run,
                                                    result,
                                                    e.output[:-1],
                                                    t=t)
