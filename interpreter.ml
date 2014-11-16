@@ -14,7 +14,8 @@ let do_int_op stack op =
   | Some v1, Some v2 ->
      match v1, v2 with
      | IntVal v1, IntVal v2 ->
-        Stack.push stack (IntVal (op v1 v2))
+        Stack.push stack (IntVal (op v1 v2));
+        []
 
      | IntVal _, badval
      | badval,   IntVal _ ->
@@ -33,7 +34,7 @@ let pop stack =
   | None ->
      eprintf "Not enough values on the stack\n%!";
      exit 1
-  | Some _ -> ()
+  | Some _ -> []
 
 let sel stack =
   let v1 = Stack.pop stack in
@@ -54,7 +55,8 @@ let sel stack =
      match v3 with
      | IntVal v3 ->
         if v3 = 0 then Stack.push stack v1
-        else Stack.push stack v2
+        else Stack.push stack v2;
+        []
      | _ ->
         eprintf"Got '%s' when expecting an integer\n%!"
                (Sexp.to_string (sexp_of_t v3));
@@ -78,7 +80,7 @@ let nget stack =
         eprintf "Not enough values on the stack\n%!";
         exit 1
      | Some vnth ->
-        Stack.push stack vnth
+        Stack.push stack vnth; []
 
 let exec stack =
   ()
@@ -109,10 +111,13 @@ let rec process stack cmds =
        | IntVal _
        | ExecSeq _ ->
           Stack.push stack hd;
+          process stack tl
        | Command cmd ->
-          do_command stack cmd
-     end;
-     process stack tl
+          let newcmds = do_command stack cmd in
+          let cmds = List.append newcmds tl in
+          process stack cmds
+     end
+
 
 let run numargs args cmds =
   let args, _  = List.split_n args numargs in
