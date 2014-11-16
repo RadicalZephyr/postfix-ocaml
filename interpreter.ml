@@ -7,26 +7,28 @@ let stack = Stack.create ()
 let do_int_op op =
   let v1 = Stack.pop stack in
   let v2 = Stack.pop stack in
-  match (v1, v2) with
-  | ((Some (IntVal v1)), (Some (IntVal v2))) ->
-     Stack.push stack (IntVal (op v1 v2))
-
-  | ((Some (IntVal _)),  (Some  badval))
-  | ((Some  badval),     (Some (IntVal _))) ->
-     eprintf "Got '%s' when expecting integer\n%!"
-             (Sexp.to_string (sexp_of_t badval));
-     exit 1
-
-  | (Some v1, Some v2) ->
-     eprintf "Got '%s' and '%s' when expecting integers\n%!"
-             (Sexp.to_string (sexp_of_t v1))
-             (Sexp.to_string (sexp_of_t v2));
-     exit 1
-  | (None,   Some _)
-  | (Some _, None)
-  | (None, None) ->
+  match v1, v2 with
+  | None,   Some _
+  | Some _, None
+  | None,   None ->
      eprintf "Not enough values on the stack\n%!";
      exit 1
+  | Some v1, Some v2 ->
+     match v1, v2 with
+     | IntVal v1, IntVal v2 ->
+        Stack.push stack (IntVal (op v1 v2))
+
+     | IntVal _, badval
+     | badval,   IntVal _ ->
+        eprintf "Got '%s' when expecting integer\n%!"
+                (Sexp.to_string (sexp_of_t badval));
+        exit 1
+
+     | _, _ ->
+        eprintf "Got '%s' and '%s' when expecting integers\n%!"
+                (Sexp.to_string (sexp_of_t v1))
+                (Sexp.to_string (sexp_of_t v2));
+        exit 1
 
 let pop () =
   match Stack.pop stack with
