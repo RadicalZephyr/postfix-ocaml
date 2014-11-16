@@ -29,17 +29,18 @@ let do_int_op op =
      exit 1
 
 let do_command = function
-  | Add -> do_int_op (fun v1 v2 -> v2 + v1)
-  | Sub -> do_int_op (fun v1 v2 -> v2 - v1)
-  | Mul -> do_int_op (fun v1 v2 -> v2 * v1)
-  | Div -> do_int_op (fun v1 v2 -> v2 / v1)
-  | Rem -> do_int_op (fun v1 v2 -> v2 % v1)
-  | Eq ->  do_int_op (fun v1 v2 -> if v2 = v1 then 1 else 0)
-  | Gt ->  do_int_op (fun v1 v2 -> if v2 < v1 then 1 else 0)
-  | Lt ->  do_int_op (fun v1 v2 -> if v2 > v1 then 1 else 0)
+  | Add ->  do_int_op (fun v1 v2 -> v2 + v1)
+  | Sub ->  do_int_op (fun v1 v2 -> v2 - v1)
+  | Mul ->  do_int_op (fun v1 v2 -> v2 * v1)
+  | Div ->  do_int_op (fun v1 v2 -> v2 / v1)
+  | Rem ->  do_int_op (fun v1 v2 -> v2 % v1)
+  | Eq ->   do_int_op (fun v1 v2 -> if v2 = v1 then 1 else 0)
+  | Gt ->   do_int_op (fun v1 v2 -> if v2 < v1 then 1 else 0)
+  | Lt ->   do_int_op (fun v1 v2 -> if v2 > v1 then 1 else 0)
   | Pop -> let _ = Stack.pop stack in ()
+  | Swap -> do_int_op (fun v1 v2 -> Stack.push stack (IntVal v1);
+                                    v2)
   | Sel ->  ()
-  | Swap -> ()
   | Nget -> ()
   | Exec -> ()
 
