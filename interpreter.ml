@@ -83,7 +83,19 @@ let nget stack =
         Stack.push stack vnth; []
 
 let exec stack =
-  ()
+  match Stack.pop stack with
+  | None ->
+     eprintf "Not enough values on the stack\n%!";
+     exit 1
+
+  | Some ((IntVal _)  as v)
+  | Some ((Command _) as v) ->
+     eprintf "Got '%s' when expecting an integer\n%!"
+             (Sexp.to_string (sexp_of_t v));
+     exit 1
+
+  | Some (ExecSeq seq) ->
+     seq
 
 let do_command stack = function
   | Add ->  do_int_op stack (fun v1 v2 -> v2 + v1)
