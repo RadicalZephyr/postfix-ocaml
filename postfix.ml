@@ -1,7 +1,7 @@
 open Core.Std
 
 let print_usage pname =
-  printf "usage: %s <program>" pname
+  printf "usage: %s <program>\n" pname
 
 
 let compile program =
@@ -10,15 +10,15 @@ let compile program =
   | Sexp.List ([])
   | Sexp.List (_ :: [])
   | Sexp.List (_ :: _ :: []) ->
-     fprintf stderr "Not a valid postfix program."
+     fprintf stderr "Not a valid postfix program.\n"
 
   | Sexp.List ((Atom "postfix") :: (Atom args) :: program) ->
-     printf "Valid postfix program of %d args: %s"
+     printf "Valid postfix program of %d args: '%s'\n"
             (Int.of_string args)
             (Sexp.to_string (Sexp.List program))
 
   | Sexp.List (pf :: args :: program) ->
-     fprintf stderr "Not a valid postfix program."
+     fprintf stderr "Not a valid postfix program.\n"
 
 
 
