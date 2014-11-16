@@ -37,6 +37,32 @@ let pop () =
      exit 1
   | Some _ -> ()
 
+let sel () =
+  let v1 = Stack.pop stack in
+  let v2 = Stack.pop stack in
+  let v3 = Stack.pop stack in
+  match v1, v2, v3 with
+  | None, None, None
+  | Some _, None, None
+  | None, Some _, None
+  | None, None, Some _
+  | Some _, Some _, None
+  | Some _, None, Some _
+  | None, Some _, Some _ ->
+     eprintf "Not enough values on the stack\n%!";
+     exit 1
+
+  | Some v1, Some v2, Some v3 ->
+     match v3 with
+     | IntVal v3 ->
+        if v3 = 0 then Stack.push stack v1
+        else Stack.push stack v2
+     | _ ->
+        eprintf"Got '%s' when expecting an integer\n%!"
+               (Sexp.to_string (sexp_of_t v3));
+        exit 1
+
+
 let do_command = function
   | Add ->  do_int_op (fun v1 v2 -> v2 + v1)
   | Sub ->  do_int_op (fun v1 v2 -> v2 - v1)
@@ -49,7 +75,7 @@ let do_command = function
   | Swap -> do_int_op (fun v1 v2 -> Stack.push stack (IntVal v1);
                                     v2)
   | Pop ->  pop ()
-  | Sel ->  ()
+  | Sel ->  sel ()
   | Nget -> ()
   | Exec -> ()
 
