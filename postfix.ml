@@ -13,9 +13,16 @@ let compile program =
      fprintf stderr "Not a valid postfix program.\n"
 
   | Sexp.List ((Atom "postfix") :: (Atom args) :: program) ->
-     printf "Valid postfix program of %d args: '%s'\n"
-            (Int.of_string args)
-            (Sexp.to_string (Sexp.List program))
+     begin
+       match Or_error.try_with (fun () -> Int.of_string args) with
+
+       | Error _ -> fprintf stderr "%s is not an integer.\n" args
+
+       | Ok numargs ->
+          printf "Valid postfix program of %d args: '%s'\n"
+                 numargs
+                 (Sexp.to_string (Sexp.List program))
+     end
 
   | Sexp.List (pf :: args :: program) ->
      fprintf stderr "Not a valid postfix program.\n"
