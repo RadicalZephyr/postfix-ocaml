@@ -36,7 +36,7 @@ let validate program =
    print_usage Sys.argv.(0);
    None
 
-let compile program =
+let compile program arglist =
   match validate program with
   | None -> ()
   | Some (numargs, ast) ->
@@ -49,6 +49,7 @@ let spec =
   let open Command.Spec in
   empty
   +> anon ("program" %: string)
+  +> anon (maybe_with_default [] (sequence ("numbers" %: int)))
 
 let command =
   Command.basic
@@ -58,7 +59,7 @@ let command =
                        ^ "\nnumargs must be an integer indicating the number of"
                        ^ " arguments that the program will take.")
     spec
-    (fun program () -> compile program)
+    (fun program arglist () -> compile program arglist)
 
 let () =
   Command.run ~version:"0.1" ~build_info:"RWO" command
