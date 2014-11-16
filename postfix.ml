@@ -37,18 +37,27 @@ let validate program =
    None
 
 let compile program arglist =
-  match validate program with
-  | None -> ()
-  | Some (numargs, ast) ->
-     printf "Valid postfix program of %d args:\n\n" numargs;
-     Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
-     print_newline ()
+  let (numargs, ast) = program in
+  printf "Valid postfix program of %d args:\n" numargs;
+  Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
+  print_newline ()
 
+let postfix_program =
+  Command.Spec.Arg_type.create
+    begin
+      fun program ->
+      match validate program with
+      | Some ret ->
+         ret
+
+      | None ->
+         exit 1
+    end
 
 let spec =
   let open Command.Spec in
   empty
-  +> anon ("program" %: string)
+  +> anon ("program" %: postfix_program)
   +> anon (maybe_with_default [] (sequence ("numbers" %: int)))
 
 let command =
