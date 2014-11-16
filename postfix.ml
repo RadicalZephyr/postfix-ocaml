@@ -14,13 +14,16 @@ let compile program =
   | Sexp.List ([])
   | Sexp.List (_ :: [])
   | Sexp.List (_ :: _ :: []) ->
-     fprintf stderr "Not a valid postfix program.\n"
+     fprintf stderr "Not a valid postfix program.\n\n";
+     print_usage Sys.argv.(0)
 
   | Sexp.List ((Atom "postfix") :: (Atom args) :: program) ->
      begin
        match Or_error.try_with (fun () -> Int.of_string args) with
 
-       | Error _ -> fprintf stderr "%s is not an integer.\n" args
+       | Error _ ->
+          fprintf stderr "%s is not an integer.\n\n" args;
+          print_usage Sys.argv.(0)
 
        | Ok numargs ->
           printf "Valid postfix program of %d args: '%s'\n"
@@ -29,7 +32,9 @@ let compile program =
      end
 
   | Sexp.List (pf :: args :: program) ->
-     fprintf stderr "Not a valid postfix program.\n"
+     fprintf stderr "Not a valid postfix program.\n\n";
+     print_usage Sys.argv.(0)
+
 
 
 
