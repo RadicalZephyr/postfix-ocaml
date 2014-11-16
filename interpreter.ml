@@ -104,8 +104,8 @@ let do_command stack = function
   | Div ->  do_int_op stack (fun v1 v2 -> v2 / v1)
   | Rem ->  do_int_op stack (fun v1 v2 -> v2 % v1)
   | Eq ->   do_int_op stack (fun v1 v2 -> if v2 = v1 then 1 else 0)
-  | Gt ->   do_int_op stack (fun v1 v2 -> if v2 < v1 then 1 else 0)
-  | Lt ->   do_int_op stack (fun v1 v2 -> if v2 > v1 then 1 else 0)
+  | Gt ->   do_int_op stack (fun v1 v2 -> if v2 > v1 then 1 else 0)
+  | Lt ->   do_int_op stack (fun v1 v2 -> if v2 < v1 then 1 else 0)
   | Swap -> do_int_op stack (fun v1 v2 -> Stack.push stack (IntVal v1);
                                     v2)
   | Pop ->  pop stack
