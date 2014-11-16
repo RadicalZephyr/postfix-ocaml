@@ -31,7 +31,7 @@ let validate program =
           Some (numargs, (List.t_of_sexp Ast.t_of_sexp (Sexp.List program)))
      end
 
-| Sexp.List (pf :: args :: program) ->
+| Sexp.List (_ :: _ :: _) ->
    fprintf stderr "Not a valid postfix program.\n\n";
    print_usage Sys.argv.(0);
    None
