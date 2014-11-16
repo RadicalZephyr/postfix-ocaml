@@ -40,12 +40,9 @@ let compile program =
   match validate program with
   | None -> ()
   | Some (numargs, ast) ->
-     printf "Valid postfix program of %d args:\n\n%s\n"
-            numargs
-            (Sexp.to_string (List.sexp_of_t Ast.sexp_of_t ast))
-
-
-
+     printf "Valid postfix program of %d args:\n\n" numargs;
+     Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
+     print_newline ()
 
 let () =
   match (Array.to_list Sys.argv) with
