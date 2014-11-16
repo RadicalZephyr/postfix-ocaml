@@ -2,6 +2,9 @@
 
 import re
 from subprocess32 import check_output, CalledProcessError, STDOUT
+from blessings import Terminal
+
+t = Terminal()
 
 postfix_prog = "./postfix.byte"
 
@@ -16,13 +19,17 @@ def run_test(program, args, result):
         output = output[:-1]
         match = result_re.match(output)
         if match and result == match.group("result"):
-            print u'  \u2713'
+            print u'  {t.green}\u2713{t.normal}'.format(t=t)
         else:
-            print u"  \u2718: Expected '{}', got '{}'\n".format(result,
-                                                       output)
+            print "Expected: '{}', Output didn't match: '{}'".format(result,
+                                                                     output)
 
     except CalledProcessError as e:
-        print u"  \u2718: Errored\nRunning '{}'\n\n{}\n\n".format(to_run, e.output)
+        print (u"  {t.red}\u2718{t.normal}: Running: {} " + \
+               "Expected '{}', Got '{}'\n").format(to_run,
+                                                   result,
+                                                   e.output[:-1],
+                                                   t=t)
 
 testre = re.compile(r"^(?P<program>.*?) \[(?P<args>.*?)\] (?P<result>-?\d+)")
 
