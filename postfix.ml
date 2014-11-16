@@ -40,7 +40,9 @@ let compile program =
   match validate program with
   | None -> ()
   | Some (numargs, ast) ->
-     ()
+     printf "Valid postfix program of %d args:\n\n%s\n"
+            numargs
+            (Sexp.to_string (List.sexp_of_t Ast.sexp_of_t ast))
 
 
 
