@@ -4,7 +4,6 @@
 2 [3 4] 3
 2 swap [3 4] 4
 3 pop swap [3 4 5] 5
-1 4 sub [3] -1
 1 4 add 5 mul 6 sub 7 div [3] 4
 5 add mul sub swap div [7 6 5 4 3] -20
 3 4000 swap pop add [300 20 1] 4020
@@ -21,11 +20,9 @@
 1 (2 mul) exec [7] 14
 0 (0 swap sub) 7 swap exec [] -7
 0 (7 swap exec) (0 swap sub) swap exec [] -7
-2 (mul sub) (1 nget mul) 4 nget swap exec swap exec [-10 2] 42
 1 2 3 sel [1] 2
 1 2 3 sel [0] 3
 1 2 3 sel [17] 2
 4 lt (add) (mul) sel exec [3 4 5 6] 30
 4 lt (add) (mul) sel exec [4 3 5 6] 11
-1 1 nget 0 lt (0 swap sub) () sel exec [-7] 7
 1 1 nget 0 lt (0 swap sub) () sel exec [6] 6
