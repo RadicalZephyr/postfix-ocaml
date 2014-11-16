@@ -73,3 +73,11 @@
 0 1 [] 2
 0 3 4 ((1 0 sel) (pop 0) sel exec) exec [] 1
 0 3 4 (() (pop 0) sel exec) exec [] 3
+0 1 [] 2
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [0] 1
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [1] 1
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [2] 2
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [3] 6
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [4] 24
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [5] 120
+1 (2 nget (2 nget mul swap 1 sub swap 3 nget exec) (swap pop) sel exec) swap 1 3 nget exec [6] 720
