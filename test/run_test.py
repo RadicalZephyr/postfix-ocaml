@@ -21,8 +21,11 @@ def run_test(program, args, result):
         if match and result == match.group("result"):
             print u'  {t.green}\u2713{t.normal}'.format(t=t)
         else:
-            print "Expected: '{}', Output didn't match: '{}'".format(result,
-                                                                     output)
+            print  (u"  {t.red}\u2718{t.normal}: Running: {} " + \
+                    "Expected: '{}', Output didn't match: '{}'").format(to_run,
+                                                                        result,
+                                                                        output,
+                                                                        t=t)
 
     except CalledProcessError as e:
         print (u"  {t.red}\u2718{t.normal}: Running: {} " + \
