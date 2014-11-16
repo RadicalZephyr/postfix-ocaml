@@ -12,8 +12,7 @@ let validate program =
   match Sexp.of_string program with
   | Sexp.Atom _
   | Sexp.List ([])
-  | Sexp.List (_ :: [])
-  | Sexp.List (_ :: _ :: []) ->
+  | Sexp.List (_ :: []) ->
      fprintf stderr "Not a valid postfix program.\n\n";
      print_usage Sys.argv.(0);
      None
