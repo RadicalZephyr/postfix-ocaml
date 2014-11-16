@@ -13,17 +13,16 @@ def run_test(program, args, result):
 
     try:
         output = check_output(to_run, stderr=STDOUT)
+        output = output[:-1]
         match = result_re.match(output)
         if match and result == match.group("result"):
-            print u'  \u2713\n'
+            print u'  \u2713'
         else:
-            print u'  \u2718'
-            print ": Expected '{}', got '{}'\n".format(result,
+            print u"  \u2718: Expected '{}', got '{}'\n".format(result,
                                                        output)
 
     except CalledProcessError as e:
-        print u'  \u2718'
-        print ": Errored\nRunning '{}'\n\n{}\n\n".format(to_run, e.output)
+        print u"  \u2718: Errored\nRunning '{}'\n\n{}\n\n".format(to_run, e.output)
 
 testre = re.compile(r"^(?P<program>.*?) \[(?P<args>.*?)\] (?P<result>-?\d+)")
 
