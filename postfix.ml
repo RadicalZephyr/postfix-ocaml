@@ -44,15 +44,21 @@ let compile program =
      Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
      print_newline ()
 
+
+let spec =
+  let open Command.Spec in
+  empty
+  +> anon ("program" %: string)
+
+let command =
+  Command.basic
+    ~summary:"Compile or interpret a postfix program"
+    ~readme:(fun () -> "A valid postfix program consists of:\n(postfix <numargs>"
+                       ^ " <commands>...)"
+                       ^ "\nnumargs must be an integer indicating the number of"
+                       ^ " arguments that the program will take.")
+    spec
+    (fun program () -> compile program)
+
 let () =
-  match (Array.to_list Sys.argv) with
-  (* If we don't get the right number of arguments, print out the usage
-  message. *)
-  | [] ->
-     print_usage ""
-  | pname :: [] ->
-     print_usage pname
-  | _ :: program :: [] ->
-     compile program
-  | pname :: _ :: _ ->
-     print_usage pname
+  Command.run ~version:"0.1" ~build_info:"RWO" command
