@@ -1,7 +1,11 @@
 open Core.Std
 
 let print_usage pname =
-  printf "usage: %s <program>\n" pname
+  fprintf stderr "usage: %s <program>\n\n" pname;
+  fprintf stderr "A valid postfix program consists of: ";
+  fprintf stderr "(postfix <numargs> <commands>...)\n\n";
+  fprintf stderr "numargs must be an integer indicating the number ";
+  fprintf stderr "of arguments\nthat the program will take.\n"
 
 
 let compile program =
