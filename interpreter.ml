@@ -4,8 +4,32 @@ open Ast
 let stack = Stack.create ()
 
 
+let add () =
+  let v1 = Stack.pop stack in
+  let v2 = Stack.pop stack in
+  match (v1, v2) with
+  | ((Some (IntVal v1)), (Some (IntVal v2))) ->
+     Stack.push stack (IntVal (v2 - v1))
+
+  | ((Some (IntVal _)),  (Some  badval))
+  | ((Some  badval),     (Some (IntVal _))) ->
+     eprintf "Got '%s' when expecting integer\n%!"
+             (Sexp.to_string (sexp_of_t badval));
+     exit 1
+
+  | (Some v1, Some v2) ->
+     eprintf "Got '%s' and '%s' when expecting integers\n%!"
+             (Sexp.to_string (sexp_of_t v1))
+             (Sexp.to_string (sexp_of_t v2));
+     exit 1
+  | (None,   Some _)
+  | (Some _, None)
+  | (None, None) ->
+     eprintf "Not enough values on the stack\n%!";
+     exit 1
+
 let do_command = function
-  | Add -> ()
+  | Add -> add ()
   | Sub -> ()
   | Mul -> ()
   | Div -> ()
