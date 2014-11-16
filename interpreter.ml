@@ -1,10 +1,8 @@
 open Core.Std
 open Ast
 
-let stack = Stack.create ()
 
-
-let do_int_op op =
+let do_int_op stack op =
   let v1 = Stack.pop stack in
   let v2 = Stack.pop stack in
   match v1, v2 with
@@ -30,14 +28,14 @@ let do_int_op op =
                 (Sexp.to_string (sexp_of_t v2));
         exit 1
 
-let pop () =
+let pop stack =
   match Stack.pop stack with
   | None ->
      eprintf "Not enough values on the stack\n%!";
      exit 1
   | Some _ -> ()
 
-let sel () =
+let sel stack =
   let v1 = Stack.pop stack in
   let v2 = Stack.pop stack in
   let v3 = Stack.pop stack in
@@ -63,24 +61,24 @@ let sel () =
         exit 1
 
 
-let do_command = function
-  | Add ->  do_int_op (fun v1 v2 -> v2 + v1)
-  | Sub ->  do_int_op (fun v1 v2 -> v2 - v1)
-  | Mul ->  do_int_op (fun v1 v2 -> v2 * v1)
-  | Div ->  do_int_op (fun v1 v2 -> v2 / v1)
-  | Rem ->  do_int_op (fun v1 v2 -> v2 % v1)
-  | Eq ->   do_int_op (fun v1 v2 -> if v2 = v1 then 1 else 0)
-  | Gt ->   do_int_op (fun v1 v2 -> if v2 < v1 then 1 else 0)
-  | Lt ->   do_int_op (fun v1 v2 -> if v2 > v1 then 1 else 0)
-  | Swap -> do_int_op (fun v1 v2 -> Stack.push stack (IntVal v1);
+let do_command stack = function
+  | Add ->  do_int_op stack (fun v1 v2 -> v2 + v1)
+  | Sub ->  do_int_op stack (fun v1 v2 -> v2 - v1)
+  | Mul ->  do_int_op stack (fun v1 v2 -> v2 * v1)
+  | Div ->  do_int_op stack (fun v1 v2 -> v2 / v1)
+  | Rem ->  do_int_op stack (fun v1 v2 -> v2 % v1)
+  | Eq ->   do_int_op stack (fun v1 v2 -> if v2 = v1 then 1 else 0)
+  | Gt ->   do_int_op stack (fun v1 v2 -> if v2 < v1 then 1 else 0)
+  | Lt ->   do_int_op stack (fun v1 v2 -> if v2 > v1 then 1 else 0)
+  | Swap -> do_int_op stack (fun v1 v2 -> Stack.push stack (IntVal v1);
                                     v2)
-  | Pop ->  pop ()
-  | Sel ->  sel ()
+  | Pop ->  pop stack
+  | Sel ->  sel stack
   | Nget -> ()
   | Exec -> ()
 
 
-let rec process cmds =
+let rec process stack cmds =
   match cmds with
   | [] -> Stack.pop stack
   | hd :: tl ->
@@ -90,20 +88,15 @@ let rec process cmds =
        | ExecSeq _ ->
           Stack.push stack hd;
        | Command cmd ->
-          do_command cmd
+          do_command stack cmd
      end;
-     process tl
+     process stack tl
 
 let run numargs args cmds =
-  let rec push_args count  = function
-    | [] -> ()
-    | hd :: tl ->
-       push_args (count - 1) tl;
-       Stack.push stack (IntVal hd)
-  in
-
-  push_args numargs args;
-  match process cmds with
+  let args, _  = List.split_n args numargs in
+  let args     = List.map ~f:(fun e -> IntVal e) args in
+  let stack    = Stack.of_list args in
+  match process stack cmds with
   | None ->
      printf "Error: Final stack was empty\n%!";
      ()
