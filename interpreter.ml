@@ -60,6 +60,11 @@ let sel stack =
                (Sexp.to_string (sexp_of_t v3));
         exit 1
 
+let nget stack =
+  ()
+
+let exec stack =
+  ()
 
 let do_command stack = function
   | Add ->  do_int_op stack (fun v1 v2 -> v2 + v1)
@@ -74,8 +79,8 @@ let do_command stack = function
                                     v2)
   | Pop ->  pop stack
   | Sel ->  sel stack
-  | Nget -> ()
-  | Exec -> ()
+  | Nget -> nget stack
+  | Exec -> exec stack
 
 
 let rec process stack cmds =
