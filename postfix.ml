@@ -38,9 +38,6 @@ let validate program =
 
 let compile program args =
   let (numargs, ast) = program in
-  printf "Valid postfix program of %d args:\n" numargs;
-  Sexp.pp_hum Format.std_formatter (List.sexp_of_t Ast.sexp_of_t ast);
-  print_newline ();
   Interpreter.run numargs args ast
 
 let postfix_program =
