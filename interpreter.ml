@@ -4,12 +4,12 @@ open Ast
 let stack = Stack.create ()
 
 
-let add () =
+let do_int_op op =
   let v1 = Stack.pop stack in
   let v2 = Stack.pop stack in
   match (v1, v2) with
   | ((Some (IntVal v1)), (Some (IntVal v2))) ->
-     Stack.push stack (IntVal (v2 - v1))
+     Stack.push stack (IntVal (op v1 v2))
 
   | ((Some (IntVal _)),  (Some  badval))
   | ((Some  badval),     (Some (IntVal _))) ->
@@ -29,7 +29,7 @@ let add () =
      exit 1
 
 let do_command = function
-  | Add -> add ()
+  | Add -> do_int_op (fun v1 v2 -> v2 + v1)
   | Sub -> ()
   | Mul -> ()
   | Div -> ()
