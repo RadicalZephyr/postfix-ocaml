@@ -28,7 +28,7 @@ let validate program =
           None
 
        | Ok numargs ->
-          Some (numargs, (List.t_of_sexp Ast.t_of_sexp (Sexp.List program)))
+          Some (numargs, (List.t_of_sexp Ast.parse_from_sexp (Sexp.List program)))
      end
 
 | Sexp.List (_ :: _ :: _) ->

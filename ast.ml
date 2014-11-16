@@ -8,10 +8,10 @@ type command =
 type t =
   | Command of command
   | IntVal of int
-  | ExecSeq of t list with sexp_of
+  | ExecSeq of t list with sexp
 
 
-let rec t_of_sexp sexp =
+let rec parse_from_sexp sexp =
   match sexp with
   | Sexp.Atom e ->
      begin
@@ -29,4 +29,4 @@ let rec t_of_sexp sexp =
      end
 
   | Sexp.List _ ->
-     ExecSeq (List.t_of_sexp t_of_sexp sexp)
+     ExecSeq (List.t_of_sexp parse_from_sexp sexp)
