@@ -29,6 +29,20 @@ let do_int_op stack op =
                 (Sexp.to_string (sexp_of_t v2));
         exit 1
 
+let swap stack =
+  let v1 = Stack.pop stack in
+  let v2 = Stack.pop stack in
+  match v1, v2 with
+  | None,   Some _
+  | Some _, None
+  | None,   None ->
+     eprintf "Not enough values on the stack\n%!";
+     exit 1
+  | Some v1, Some v2 ->
+     Stack.push stack v1;
+     Stack.push stack v2;
+     []
+
 let pop stack =
   match Stack.pop stack with
   | None ->
@@ -106,8 +120,7 @@ let do_command stack = function
   | Eq ->   do_int_op stack (fun v1 v2 -> if v2 = v1 then 1 else 0)
   | Gt ->   do_int_op stack (fun v1 v2 -> if v2 > v1 then 1 else 0)
   | Lt ->   do_int_op stack (fun v1 v2 -> if v2 < v1 then 1 else 0)
-  | Swap -> do_int_op stack (fun v1 v2 -> Stack.push stack (IntVal v1);
-                                    v2)
+  | Swap -> swap stack
   | Pop ->  pop stack
   | Sel ->  sel stack
   | Nget -> nget stack
