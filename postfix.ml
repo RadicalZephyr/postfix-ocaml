@@ -8,14 +8,15 @@ let print_usage pname =
   fprintf stderr "of arguments\nthat the program will take.\n"
 
 
-let compile program =
+let validate program =
   match Sexp.of_string program with
   | Sexp.Atom _
   | Sexp.List ([])
   | Sexp.List (_ :: [])
   | Sexp.List (_ :: _ :: []) ->
      fprintf stderr "Not a valid postfix program.\n\n";
-     print_usage Sys.argv.(0)
+     print_usage Sys.argv.(0);
+     None
 
   | Sexp.List ((Atom "postfix") :: (Atom args) :: program) ->
      begin
@@ -23,17 +24,23 @@ let compile program =
 
        | Error _ ->
           fprintf stderr "%s is not an integer.\n\n" args;
-          print_usage Sys.argv.(0)
+          print_usage Sys.argv.(0);
+          None
 
        | Ok numargs ->
-          printf "Valid postfix program of %d args: '%s'\n"
-                 numargs
-                 (Sexp.to_string (Sexp.List program))
+          Some (numargs, (List.t_of_sexp Ast.t_of_sexp (Sexp.List program)))
      end
 
-  | Sexp.List (pf :: args :: program) ->
-     fprintf stderr "Not a valid postfix program.\n\n";
-     print_usage Sys.argv.(0)
+| Sexp.List (pf :: args :: program) ->
+   fprintf stderr "Not a valid postfix program.\n\n";
+   print_usage Sys.argv.(0);
+   None
+
+let compile program =
+  match validate program with
+  | None -> ()
+  | Some (numargs, ast) ->
+     ()
 
 
 
