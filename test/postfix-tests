@@ -70,3 +70,6 @@
 2 () (pop 0) sel exec [1 1] 1
 2 () (pop 0) sel exec [25 1] 1
 2 () (pop 0) sel exec [1 25] 25
+0 1 [] 2
+0 3 4 ((1 0 sel) (pop 0) sel exec) exec [] 1
+0 3 4 (() (pop 0) sel exec) exec [] 3
