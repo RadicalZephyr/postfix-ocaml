@@ -104,7 +104,7 @@ let exec stack =
 
   | Some ((IntVal _)  as v)
   | Some ((Command _) as v) ->
-     eprintf "Got '%s' when expecting an integer\n%!"
+     eprintf "Got '%s' when expecting an executable sequence\n%!"
              (Sexp.to_string (sexp_of_t v));
      exit 1
 
