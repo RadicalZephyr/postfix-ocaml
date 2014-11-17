@@ -93,6 +93,12 @@ let nget stack =
      | None ->
         eprintf "Not enough values on the stack\n%!";
         exit 1
+     | Some ((Command _) as v)
+     | Some ((ExecSeq _) as v) ->
+        eprintf "Got '%s' when expecting an integer\n%!"
+                (Sexp.to_string (sexp_of_t v));
+        exit 1
+
      | Some vnth ->
         Stack.push stack vnth; []
 
